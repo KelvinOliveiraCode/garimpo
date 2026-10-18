@@ -14,7 +14,7 @@
 
 ## O que é
 
-Curadoria de 131 ofertas Shopee: filtros, wishlist e SEO ,  100% client-side | Curated Shopee deals site, 100% client-side
+Curadoria de 131 ofertas Shopee: filtros, wishlist e SEO ,  100% client-side
 
 ---
 
