@@ -1,117 +1,93 @@
 # garimpo
 
-<div align="center">
-
 [English](README.en.md) · **Português (Brasil)**
 
-</div>
-
-[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML) [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS) [![Vanilla JS](https://img.shields.io/badge/Vanilla%20JS-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript) [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-222?style=flat-square&logo=githubpages)](https://pages.github.com/) [![MIT License](https://img.shields.io/badge/License-MIT-f4c430?style=flat-square)](LICENSE)
-
-### Curadoria de 131 ofertas Shopee: filtros, wishlist e SEO ,  100% client-side
-
----
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)](#) [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)](#) [![Vanilla JS](https://img.shields.io/badge/Vanilla%20JS-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](#) [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Deployed-222?style=flat-square&logo=githubpages)](#) [![MIT License](https://img.shields.io/badge/License-MIT-f4c430?style=flat-square)](LICENSE)
 
 ## O que é
 
-Curadoria de 131 ofertas Shopee: filtros, wishlist e SEO ,  100% client-side
+**Garimpo** é uma curadoria **100% client-side** de **131 ofertas da Shopee** em 8 categorias. O usuário filtra, busca, ordena e salva favoritos (wishlist) sem sair da página; cada produto tem link direto para a loja oficial da Shopee, que cobra e entrega. Não há cadastro, conta nem tracking.
 
----
+## Status
 
-## Início Rápido
+Em produção. Publicado em <https://kelvinoliveiracode.github.io/garimpo/> (HTTP 200 verificado).
 
-Abra `index.html` diretamente no navegador, ou sirva localmente:
+## Funcionalidades
+
+- **Catálogo de 131 produtos** em 8 categorias (dados em `produtos.json`: id, categoria, título, preço, loja, selo, rating, img, link).
+- **Filtro por categoria**, **busca** e **ordenação** (sort) em tempo real, com contador de resultados.
+- **Wishlist** (favoritos) com contador e botão dedicado.
+- **Carrossel de destaques** com countdown, e botão "carregar mais" (load more).
+- **SEO**: sitemap, robots, Open Graph/Twitter e dados estruturados JSON-LD (`ItemList`, `Organization`, `WebSite`).
+- **Zero build, zero dependência**: um `index.html` + `produtos.json`; o produto é linkado à Shopee oficial.
+
+> Nota: o README anterior descrevia um **catálogo de serviços de nuvem** (124 provedores da AWS/GCP) — não existe neste repositório. Corrigido.
+
+## Arquitetura
+
+Site estático de página única: `index.html` (841 linhas) carrega `produtos.json` e monta a grade com JavaScript vanilla. Sem framework, sem build e sem backend — os cliques vão para a Shopee.
+
+```mermaid
+flowchart LR
+    H[index.html] --> D[produtos.json - 131 ofertas]
+    H --> F[filtro/busca/ordenação]
+    H --> W[wishlist]
+    H --> C[carrossel + load more]
+    F --> G[grade de produtos]
+    G --> S[link para a Shopee oficial]
+```
+
+## Stack
+
+- HTML5, CSS3 e JavaScript ES6+ vanilla
+- JSON (dados de produtos)
+- Hospedagem: GitHub Pages
+
+## Estrutura do repositório
+
+```
+garimpo/
+├── index.html       # a página inteira (841 linhas)
+├── produtos.json    # 131 ofertas em 8 categorias
+├── robots.txt · sitemap.xml
+├── img/             # imagens dos produtos
+└── LICENSE          # MIT
+```
+
+## Pré-requisitos e instalação
+
+Nenhum. Basta servir a pasta estaticamente (o conteúdo é montado via `fetch` de `produtos.json`, então não abre como `file://`).
+
+## Como executar
 
 ```bash
 python -m http.server 8080
-# Acesse http://localhost:8080
+# acesse http://localhost:8080
 ```
 
-Ou faça deploy no GitHub Pages / Netlify / Vercel com configuração zero.
+## Testes e qualidade
 
-## Como funciona
+Não há testes automatizados nem deploy de CI neste repositório (ausência de pasta de testes, de `package.json` e de workflow confirmada). O comportamento é validado manualmente no navegador.
 
-**Arquitetura zero-build, arquivo único** ,  tudo vive em `index.html`:
-- **HTML5** estrutura semântica
-- **CSS3** propriedades customizadas para tema (claro/escuro)
-- **Vanilla ES6+ JavaScript** ,  sem framework, sem build
-- **localStorage** para persistência de tema
-- **Catálogo JSON** (`catalogo.json`) como fonte de dados aberta
+## Decisões técnicas e trade-offs
 
----
+- **100% client-side, sem backend**: sem cadastro nem tracking; a conversão (compra) acontece na Shopee.
+- **Dados em JSON separado**: adicionar/editar uma oferta não exige mexer no HTML.
+- **Renderização com JavaScript vanilla**: sem framework, carregamento leve.
+- **SEO com dados estruturados** e sitemap para indexação da curadoria.
 
-## Capacidades
+## Limitações conhecidas e roadmap
 
-| Capacidade | Descrição |
-|------------|-------------|
-| Motor de Recomendação | Filtro determinístico: Área ∩ Preço -> Provedor -> Tier gratuito -> Nível de config |
-| Catálogo | 124 serviços de 8 provedores (AWS, Azure, GCP, Oracle, Cloudflare, DO, Firebase, Google) |
-| Dados Abertos | catalogo.json + llms.txt para consumo por chat de IA |
-| Educação | Vocabulário de nuvem (IaaS/PaaS/SaaS), myth-busting, glossário, quiz de 5 perguntas |
-| Tematização | Modo claro/escuro persistido em localStorage, sem CSS externo |
-| Zero Build | index.html único ,  deploy em qualquer lugar (GitHub Pages, Netlify, Vercel) |
-| Auditoria | Cada decisão do filtro exibida: "Como chegamos aqui" rastreia todos 124 serviços |
-| Sem Rastreamento | Sem contas de usuário, sem analytics, sem dependências externas |
+- O preço/selo vêm de um snapshot em `produtos.json`; não há sincronização automática com a Shopee.
+- A wishlist persiste no navegador (localStorage, chave `garimpo_wishlist`); filtros/busca não são salvos.
+- Sem paginação real — o "carregar mais" exibe mais itens do mesmo catálogo.
 
+## Processo de desenvolvimento
 
----
+Projeto individual de Kelvin Oliveira, construído com agentes de IA orquestrados e revisado pelo autor. A curadoria das ofertas, a arquitetura client-side e a revisão são do autor.
 
+## Licença e autor
 
+MIT — Copyright (c) 2026 Kelvin Rebelo de Oliveira.
 
----
-
-## Perguntas Frequentes
-
-<details>
-<summary><strong>O que é este projeto?</strong></summary>
-
-Um estudo/projeto em vanilla JS demonstrando Client-side data fetching, JSON data catalog, Single-page HTML entry, localStorage theme persistence.
-
-</details>
-
-<details>
-<summary><strong>Como executar?</strong></summary>
-
-Veja [Início Rápido](#início-rápido) para comandos copiáveis.
-
-</details>
-
-<details>
-<summary><strong>Há testes?</strong></summary>
-
-Nenhum teste automatizado neste repositório.
-
-</details>
-
-<details>
-<summary><strong>Posso usar em produção?</strong></summary>
-
-Este é um **projeto de estudo/portfólio**. Revise e endureça (auth, persistência, monitoramento, etc.) antes de usar em produção.
-
-</details>
-
-
-
----
-
-## Documentação
-
-- **Código-Fonte** ,  Navegue pelo diretório `src/` para detalhes de implementação
-- **Referência da API** ,  N/A
-- **Diagrama de Arquitetura** ,  Veja [architecture.mermaid](docs/architecture.mermaid) (se presente)
-- **Changelog** ,  [CHANGELOG.md](CHANGELOG.md) (se presente)
-- **Contribuindo** ,  [CONTRIBUTING.md](CONTRIBUTING.md) (se presente)
-
-## Licença
-
-[MIT](LICENSE) ,  Kelvin Oliveira
-
----
-
-<div align="center">
-
-**Construído com** · Vanilla HTML/CSS/JS
-
-**Autor** · [Kelvin Oliveira](https://github.com/KelvinOliveiraCode) · [Portfolio](https://kelvinoliveiracode.github.io/portfolio/)
-
-</div>
+**Autor**: [Kelvin Oliveira](https://github.com/KelvinOliveiraCode) · [Portfólio](https://kelvinoliveiracode.github.io/portfolio/)
